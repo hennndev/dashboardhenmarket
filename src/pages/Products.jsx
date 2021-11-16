@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import Modal from '../components/UI/Modal'
+import FormatPrice from '../components/UI/FormatPrice'
+import InputSearch from '../components/UI/InputSearch'
 import AddProduct from '../components/Products/AddProduct'
 import ProductsTable from '../components/Products/ProductsTable'
 
 const Products = () => {
-    const [isAdd, setIsAdd] = useState(false)
-    const [isEdit, setIsEdit] = useState(null)
-    const [isModal, setIsModal] = useState(null)
+    const [isAdd, setIsAdd] = useState(false) //ADD FUNCTION
+    const [isEdit, setIsEdit] = useState(null) //UPDATE FUNCTION
+    const [isModal, setIsModal] = useState(null) //MODAL FUNCTION
+    const [searchTerm, setSearchTerm] = useState('') //SEARCH FUNCTION
 
     const handleAdd = () => {
         setIsAdd(!isAdd)
@@ -21,13 +24,17 @@ const Products = () => {
         setIsEdit(null)
     }
 
-    const handleCloseModal = () => setIsModal(null)
-    const handleOpenModal = (data) => setIsModal(data)
-
     return (
-        <div className="p-5 pb-20 md:p-10">
-            <div className="flex justify-end">
-                <button className="btn bg-gray-800 mb-4" onClick={handleAdd}>
+        <div className="page-container">
+            <div className="flex justify-between flex-col sm:flex-row mb-6">
+                {!isAdd && (
+                    <InputSearch 
+                        title="Products"
+                        classes="flex-grow sm:mr-3"
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}/>
+                )}
+                <button className="btn bg-gray-800 mt-4 w-max sm:mt-0" onClick={handleAdd}>
                     {!isAdd ? 'Add Product' : 'Back'}
                 </button>
             </div>
@@ -37,15 +44,20 @@ const Products = () => {
             {!isAdd && (
                 <div className="overflow-x-scroll w-full">    
                     <ProductsTable 
-                        handleOpenModal={handleOpenModal}
-                        handleEdit={handleEdit}/>
+                        handleOpenModal={(data) => setIsModal(data)}
+                        handleEdit={handleEdit}
+                        searchTerm={searchTerm}/>
                 </div>
             )}
-            {isModal && <Modal handleClose={handleCloseModal}>
-                <div className="p-4">
+            {isModal && <Modal handleClose={() => setIsModal(null)}>
+                <div className="p-4 space-y-3">
                     <h2 className="text-center text-xl mb-3">Product Detail</h2>
                     <p>Product Name: {isModal?.productName}</p>
-                    <p>Product Price: ${isModal?.productPrice}</p>
+                    <p>Product Price: <FormatPrice
+                        summary
+                        value={isModal?.productPrice}
+                        classes="text-lg font-medium text-gray-800"/> </p>
+                    
                     <p>Product Quantity: {isModal?.productQty}</p>
                     <p>Product Description: {isModal?.productDesc}</p>
                 </div>    

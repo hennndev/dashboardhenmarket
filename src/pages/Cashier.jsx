@@ -1,18 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Modal from '../components/UI/Modal'
-import ProductsTable from '../components/Products/ProductsTable'
-import CartTable from '../components/Cashier/CartTable'
 import Summary from '../components/Cashier/Summary'
-import { AiOutlineClose } from 'react-icons/ai'
-
+import InputSearch from '../components/UI/InputSearch'
+import CashierTable from '../components/Cashier/CashierTable'
+import CashierBlank from '../components/Cashier/CashierBlank'
+import ProductsTable from '../components/Products/ProductsTable'
 
 const Cashier = () => {
     const [isModal, setIsModal] = useState(null)
     const [searchTerm, setSearchTerm] = useState('')
     const [cartTerm, setCartTerm] = useState(JSON.parse(localStorage.getItem('cartTerm')) || [])
+    const inputRef = useRef(null)
 
     const handleCloseModal = () => setIsModal(null)
-    const handleOpenModal = (e, data) => {
+    const handleOpenModal = (data, e) => {
         e.stopPropagation()
         setIsModal(data)
     }
@@ -54,35 +55,42 @@ const Cashier = () => {
         return currVal + (val.count * val.productPrice)
     }, 0)
 
-    
 
 
     return (
-        <div className="p-5 pb-20 md:p-10">
-            <div className="w-full bg-white mb-5 flex items-center justify-between px-5">
-                <input 
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    type="text" placeholder="Search products" className="py-3 rounded-md outline-none flex-grow"/>
-                <AiOutlineClose className="text-red-500 ml-5 text-xl cursor-pointer" onClick={() => setSearchTerm('')}/>
-            </div>
+        <div className="page-container">
+            <InputSearch 
+                title="Products"
+                inputRef={inputRef}
+                searchTerm={searchTerm} 
+                setSearchTerm={setSearchTerm}/>
 
             <div className="overflow-x-scroll w-full mt-5">    
                 <ProductsTable 
                     cashier
                     handleOpenModal={handleOpenModal}
                     handleAddCart={handleAddCart}
-                    searchTerm={searchTerm}/>
+                    searchTerm={searchTerm}
+                    classes/>
             </div>
             
-            <div className="overflow-x-auto w-full">
-                <CartTable 
-                    cartTerm={cartTerm}
-                    handleAddCart={handleAddCart}
-                    handleDeleteCart={handleDeleteCart}/>
-            </div>
+            {cartTerm.length > 0 && (
+                <div className="overflow-x-scroll w-full mt-5">
+                    <CashierTable 
+                        cartTerm={cartTerm}
+                        handleAddCart={handleAddCart}
+                        handleDeleteCart={handleDeleteCart}/>
+                </div>
+            )}
+
+            {cartTerm.length < 1 && <CashierBlank handleSearch={() => inputRef.current.focus()}/>}
+
             <div className="flex items-center justify-end">
-                {cartTerm.length > 0 && <Summary totalPrice={totalPrice}/>}
+                {cartTerm.length > 0 && 
+                    <Summary 
+                        totalPrice={totalPrice} 
+                        cartTerm={cartTerm}
+                        handleClear={() => setCartTerm([])}/>}
             </div>
             
             

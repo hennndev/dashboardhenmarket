@@ -2,7 +2,7 @@ import React from 'react'
 import Login from './pages/Login'
 import Content from './containers/Content'
 import PrivateRoute from './components/UI/PrivateRoute'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Switch } from 'react-router-dom'
 
 const App = () => {
 	return (

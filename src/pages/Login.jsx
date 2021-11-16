@@ -3,6 +3,7 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { login } from '../store/actions/actions'
+import InputControl from '../components/UI/InputControl'
 import { handleAdmin } from '../store/reducers/appReducer'
 
 const Login = (props) => {
@@ -26,9 +27,16 @@ const Login = (props) => {
                     dispatch(handleAdmin(res.user))
                     props.history.push('/')
                 }
-            } catch(err) {
-                console.log(err)
-                setIsError(err)
+            } catch(error) {
+                console.log(error)
+                setIsLoading(false)
+                if(error.code === 'auth/user-not-found') {
+                    setIsError('Email not valid as admin')
+                } else if(error.code === 'auth/wrong-password') {
+                    setIsError('Wrong password')
+                } else {
+                    setIsError(error.code)
+                }
             }
         },
         validationSchema: Yup.object({
@@ -42,32 +50,26 @@ const Login = (props) => {
             <form className="mt-24 shadow-lg rounded-md w-modal h-96 bg-white p-5" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center text-xl font-medium mb-5">Login Form</h1>
                 {/* EMAIL */}
-                <div className="input-control">
-                    <label htmlFor="email" className="mb-2">Email</label>
-                    <input 
-                        type="email" 
-                        className="border border-gray-300 py-1 px-3 outline-none rounded" 
-                        placeholder="input your email..."
-                        {...formik.getFieldProps('email')}
-                        onBlur={formik.handleBlur}/>
-                    {formik.touched.email && formik.errors.email && <small className="text-red-400">{formik.errors.email}</small>}
-                </div>
+                <InputControl
+                    id="email"
+                    title="Email"
+                    placeholder="input your email"
+                    formik={formik}/>
+
                 {/* PASSWORD */}
-                <div className="input-control">
-                    <label htmlFor="email" className="mb-2">Password</label>
-                    <input 
-                        type="password" 
-                        className="border border-gray-300 py-1 px-3 outline-none rounded" 
-                        placeholder="input your password..."
-                        {...formik.getFieldProps('password')}
-                        onBlur={formik.handleBlur}/>
-                    {formik.touched.password && formik.errors.password && <small className="text-red-400">{formik.errors.password}</small>}
-                </div>
+                <InputControl
+                    id="password"
+                    type="password"
+                    title="Password"
+                    placeholder="input your password"
+                    formik={formik}/>
+
                 <div className="grid place-items-center mt-5">
                     <button className={`btn ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500'} flex items-center`} type="submit">
                         {isLoading && <div className="animate-spin ease duration-300 w-3 h-3 mr-2 border-2 border-white"/>}
                         {isLoading ? 'Loading, please wait' : 'Login'}
                     </button>
+                    {isError && <small className="mt-2 text-red-400">{isError}</small>}
                 </div>
             </form>
         </div>

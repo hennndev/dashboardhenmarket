@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useDropzone } from 'react-dropzone'
+import InputControl from '../UI/InputControl'
 import { addProduct, editProduct } from '../../store/actions/actions'
 
 const AddProduct = ({oldData, handleBack}) => {
@@ -17,8 +18,7 @@ const AddProduct = ({oldData, handleBack}) => {
             productDesc: ''
         },
         onSubmit: (values) => {
-            console.log(values)
-            {oldData ? editProduct(oldData, values, setIsLoading, handleBack) : addProduct(values, setIsLoading, handleBack)}
+            oldData ? editProduct(oldData, values, setIsLoading, handleBack) : addProduct(values, setIsLoading, handleBack)
         },
         validationSchema: Yup.object({
             productName: Yup.string().required('Product name is required!'),
@@ -42,6 +42,8 @@ const AddProduct = ({oldData, handleBack}) => {
                 productDesc: oldData.productDesc
             })
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [oldData])
 
     const onDrop = (acceptedFiles) => {
@@ -50,72 +52,43 @@ const AddProduct = ({oldData, handleBack}) => {
             productImage: acceptedFiles[0]
         })
     }
-
     const { getRootProps, getInputProps, isDragActive } = useDropzone({onDrop})
+
     return (
         <div className="bg-white">
             <form className="p-5" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center text-2xl text-gray-700 font-bold mb-10">Add Product</h1>
 
                 {/* PRODUCT NAME */}
-                <div className="input-control">
-                    <label htmlFor="productName" className="mb-2">Product Name</label>
-                    <input 
-                        type="text" 
-                        id="productName" 
-                        placeholder="product name..." 
-                        className="border border-gray-200 p-3 rounded-md"
-                        {...formik.getFieldProps('productName')}
-                        onBlur={formik.handleBlur}/>
-                    {formik.errors.productName && formik.touched.productName && (
-                        <small className="text-red-400">{formik.errors.productName}</small>
-                    )}
-                </div>
+                <InputControl 
+                    id="productName"
+                    title="Product Name"
+                    type="text"
+                    formik={formik}/>
 
                 {/* PRODUCT PRICE */}
-                <div className="input-control">
-                    <label htmlFor="productPrice" className="mb-2">Product Price</label>
-                    <input 
-                        type="number" 
-                        id="productPrice"
-                        placeholder="product price..." 
-                        className="border border-gray-200 p-3 rounded-md"
-                        {...formik.getFieldProps('productPrice')}
-                        onBlur={formik.handleBlur}/>
-                    {formik.touched.productPrice && formik.errors.productPrice && <small className="text-red-400">{formik.errors.productPrice}</small>}
-                </div>
+                <InputControl 
+                    id="productPrice"
+                    title="Product Price"
+                    type="number"
+                    formik={formik}/>
 
                 {/* PRODUCT QUANTITY */}
-                <div className="input-control">
-                    <label htmlFor="productQty" className="mb-2">Product Quantity</label>
-                    <input 
-                        type="number" 
-                        id="productQty"
-                        placeholder="product quantity..." 
-                        className="border border-gray-200 p-3 rounded-md"
-                        {...formik.getFieldProps('productQty')}
-                        onBlur={formik.handleBlur}/>
-                    {formik.touched.productQty && formik.errors.productQty && <small className="text-red-400">{formik.errors.productQty}</small>}
-                </div>
+                <InputControl 
+                    id="productQty"
+                    title="Product Quantity"
+                    type="number"
+                    formik={formik}/>
 
                 {/* PRODUCT DESC */}
-                <div className="input-control">
-                    <label htmlFor="productDesc" htmlFor="productDesc" className="mb-2">Product Description</label>
-                    <textarea 
-                        id="productDesc" 
-                        cols="30" rows="5" 
-                        className="border border-gray-200 p-3 rounded-md"
-                        {...formik.getFieldProps('productDesc')}
-                        onBlur={formik.handleBlur}>
-                    
+                <InputControl 
+                    id="productDesc"
+                    title="Product Description"
+                    formik={formik}
+                    inputType="textarea"/>
 
-                    </textarea>
-                    {formik.touched.productDesc && formik.errors.productDesc && <small className="text-red-400">{formik.errors.productDesc}</small>}
-                </div>
-
-                {/* IMAGE */}
-                <div className="input-control">
-                    <label htmlFor="imageProduct" className="mb-2">Image Product</label>
+                {/* PRODUCT IMAGE */}
+                <InputControl id="productImage" title="Product Image" formik={formik} image> 
                     <div {...getRootProps()} 
                         className={`border-2 border-dashed px-5 py-10 text-center ${isDragActive ? 'border-blue-300' : 'border-gray-300'}`}>
                         <input {...getInputProps()} onBlur={formik.handleBlur}/>
@@ -126,14 +99,17 @@ const AddProduct = ({oldData, handleBack}) => {
                         }
                     </div>
                     <small>{formik?.values?.productImage?.name || oldData?.productImageName}</small>
-                    {formik.touched.productImage && formik.errors.productImage && <small className="text-red-400">{formik.errors.productImage}</small>}
-                </div>
+                </InputControl>
+
+
                 <div className="mt-10 flex items-center space-x-3">
-                    <button className={`btn ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500'} flex items-center`} type="submit">
-                        {isLoading && <div className="animate-spin ease duration-300 w-3 h-3 mr-2 border-2 border-white"/>}
+                    <button 
+                        className={`btn ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500'} flex items-center`} 
+                        type="submit">
+                        {isLoading && <div className="btn-loading"/>}
                         {isLoading ? 'Loading, please wait' : 'Submit'}
                     </button>
-                    <button className="btn bg-gray-500" onClick={handleBack}>Cancel</button>
+                    <button className={`btn bg-gray-500 ${isLoading && 'cursor-not-allowed'}`} onClick={handleBack}>Cancel</button>
                 </div>
             </form>
         </div>

@@ -1,7 +1,8 @@
 import React from 'react'
+import FormatPrice from '../UI/FormatPrice'
 import { BsArrowRightCircle } from 'react-icons/bs'
 
-const Card = ({data: {icon: Icon, title, bgColor, value }}) => {
+const Card = ({data: {icon: Icon, title, bgColor, value, id }}) => {
     return (
         <div className="h-32 bg-white rounded-md p-5 relative shadow-sm">
             <div className="flex items-center space-x-3">
@@ -10,7 +11,12 @@ const Card = ({data: {icon: Icon, title, bgColor, value }}) => {
                 </div>
                 <div>
                     <h3 className="text-gray-500 text-md">{title}</h3>
-                    <p className="text-gray-800 font-medium text-xl">{value}</p>
+                    {id === 1 ? <FormatPrice value={value} summary classes="text-gray-800 font-medium text-xl"/> : (
+                        <p className="text-gray-800 font-medium text-xl">
+                            {value}
+                        </p>
+                    )}
+                    
                 </div>
             </div>
             <div className="absolute bottom-2 right-5 flex items-center space-x-2 text-gray-400 cursor-pointer animate-bounce">

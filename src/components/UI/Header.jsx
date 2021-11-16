@@ -1,5 +1,5 @@
 import React from 'react'
-import { MdOutlineDarkMode, MdOutlineLightMode, MdMenu } from 'react-icons/md'
+import { MdOutlineDarkMode, MdMenu } from 'react-icons/md'
 import { AiOutlineUser } from 'react-icons/ai' 
 import { withRouter } from 'react-router-dom'
 import { handleSide } from '../../store/reducers/appReducer'

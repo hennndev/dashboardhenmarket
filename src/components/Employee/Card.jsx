@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Card = ({employee, deleteEmployee}) => {
+const Card = ({employee, handleEdit, deleteEmployee}) => {
     return (
         <div className="min-h-60 bg-white p-5 shadow-md">
             <div className="flex justify-center items-center">
@@ -26,7 +26,7 @@ const Card = ({employee, deleteEmployee}) => {
                     {' '}{employee.employeeNoTelp}
                 </h2>
                 <div className="flex items-center justify-center mt-5 space-x-3">
-                    <button className="btn bg-blue-500 text-sm">Update</button>
+                    <button className="btn bg-blue-500 text-sm" onClick={handleEdit}>Update</button>
                     <button className="btn bg-red-500 text-sm" onClick={deleteEmployee}>Delete</button>
                 </div>
             </div>

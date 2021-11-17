@@ -5,7 +5,7 @@ const Card = ({employee, handleEdit, deleteEmployee}) => {
         <div className="min-h-60 bg-white p-5 shadow-md">
             <div className="flex justify-center items-center">
                 <div className="h-20 w-20 rounded-full">
-                    <img src={employee.employeeImage} alt="" className="w-full h-full object-cover rounded-full" />
+                    <img src={employee.employeeImage} alt={employee.employeeName} className="w-full h-full object-cover rounded-full" />
                 </div>
             </div>
             <div className="mt-5 px-5">

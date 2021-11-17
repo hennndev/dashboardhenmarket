@@ -46,7 +46,6 @@ const AddEmployee = ({oldData, handleBack}) => {
     useEffect(() => {
         if(oldData) {
             formik.setValues({
-                ...formik.values,
                 employeeName: oldData.employeeName,
                 employeeImage: oldData.employeeImage,
                 employeeStatus: oldData.employeeStatus,
@@ -78,7 +77,6 @@ const AddEmployee = ({oldData, handleBack}) => {
                     type="text"
                     formik={formik}
                 />
-
                 {/* EMPLOYEE STATUS */}
                 <InputControl
                     id="employeeStatus"
@@ -86,7 +84,6 @@ const AddEmployee = ({oldData, handleBack}) => {
                     type="text"
                     formik={formik}
                 />
-                
                 {/* EMPLOYEE MOTTO */}
                 <InputControl
                     id="employeeMotto"
@@ -94,7 +91,6 @@ const AddEmployee = ({oldData, handleBack}) => {
                     type="text"
                     formik={formik}
                 />
-
                 {/* EMPLOYEE NO TELP */}
                 <InputControl
                     id="employeeNoTelp"
@@ -103,16 +99,15 @@ const AddEmployee = ({oldData, handleBack}) => {
                     formik={formik}
                 />
                
-
                 {/* EMPLOYEE IMAGE */}
                 <InputControl id="employeeImage" title="Employee Image" formik={formik} image>
                     <div {...getRootProps()} 
                         className={`border-2 border-dashed px-5 py-10 text-center ${isDragActive? 'border-blue-300' : 'border-gray-300'}`}>
-                        <input {...getInputProps()} onBlur={formik.handleBlur}/>
+                        <input {...getInputProps()}/>
                         {
                             isDragActive ?
-                            <p className="">Drop the files here ...</p> :
-                            <p className="">Drag 'n' drop some files here, or click to select files</p>
+                            <p>Drop the files here ...</p> :
+                            <p>Drag 'n' drop some files here, or click to select files</p>
                         }
                     </div>
                     <small>{formik?.values?.employeeImage?.name || oldData?.employeeImageName }</small>
@@ -124,7 +119,9 @@ const AddEmployee = ({oldData, handleBack}) => {
                         {isLoading && <div className="btn-loading"/>}
                         {isLoading ? 'Loading, please wait' : 'Submit'}
                     </button>
-                    <button type="buttom" className={`btn bg-gray-500 ${isLoading && 'cursor-not-allowed'}`} onClick={handleBack}>Cancel</button>
+                    <button type="buttom" className={`btn bg-gray-500 ${isLoading && 'cursor-not-allowed'}`} onClick={handleBack}>
+                        Cancel
+                    </button>
                 </div>
             </form>
         </div>

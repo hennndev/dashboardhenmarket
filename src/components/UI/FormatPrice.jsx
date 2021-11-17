@@ -1,7 +1,7 @@
 import React from 'react'
 import NumberFormat from 'react-number-format'
 
-const FormatPrice = ({value, summary = null, classes = null}) => {
+const FormatPrice = ({value, summary = null, ptag = null, classes = null}) => {
     return <NumberFormat
             value={value}
             displayType="text"

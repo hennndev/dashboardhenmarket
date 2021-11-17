@@ -21,7 +21,7 @@ const CashierTable = ({cartTerm, handleAddCart, handleDeleteCart}) => {
                 {cartTerm.map((item) => (
                     <tr className="border-b border-gray-300 cursor-pointer" key={item.id}>
                         <td className="flex items-center justify-center py-3 pl-2">
-                            <img src={item.productImage} alt={item.productName} className="h-16 w-16" />
+                            <img src={item.productImage} alt={item.productName} className="h-16 w-16 object-cover" />
                         </td>
                         <td className="text-center break-words px-5">
                             {item.productName}
@@ -36,7 +36,9 @@ const CashierTable = ({cartTerm, handleAddCart, handleDeleteCart}) => {
                         </td>
                         <FormatPrice value={item.productPrice * item.count}/> 
                         <td className="text-center px-2 text-sm">
-                            <button className="btn bg-red-500" onClick={(del = true) => handleDeleteCart(item, del)}>Delete</button>
+                            <button className="btn bg-red-500" onClick={(del = true) => handleDeleteCart(item, del)}>
+                                Delete
+                            </button>
                         </td> 
                     </tr>
                 ))}

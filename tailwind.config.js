@@ -6,10 +6,10 @@ module.exports = {
     extend: {
       gridTemplateColumns: {
         // Simple 16 column grid
-       'card': 'repeat(auto-fill, minmax(250px, 1fr))',
+       'card': 'repeat(auto-fill, minmax(300px, 1fr))',
       },
       width: {
-        'modal': '350px'
+        'modal': '450px'
       },
       height: {
         'modal': '400px'

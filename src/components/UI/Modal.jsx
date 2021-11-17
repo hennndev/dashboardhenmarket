@@ -4,7 +4,7 @@ import reactDom from 'react-dom'
 
 const BoxModal = ({children}) => {
     return (
-        <div className="fixed bg-white shadow-lg top-1/2 left-1/2 z-50 transform -translate-y-1/2 -translate-x-1/2 w-modal h-modal">
+        <div className="fixed bg-white shadow-lg top-1/2 left-1/2 z-50 transform -translate-y-1/2 -translate-x-1/2 w-80 sm:w-modal h-modal overflow-y-scroll">
             {children}
         </div>
     )
@@ -13,7 +13,6 @@ const BoxModal = ({children}) => {
 const Overlay = ({handleClose}) => {
     return (
         <div className="fixed w-full h-full top-0 bottom-0 left-0 right-0 z-40 bg-overlay" onClick={handleClose}>
-
         </div>
     )
 }

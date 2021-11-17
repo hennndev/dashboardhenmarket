@@ -34,7 +34,7 @@ const Products = () => {
                         searchTerm={searchTerm}
                         setSearchTerm={setSearchTerm}/>
                 )}
-                <button className="btn bg-gray-800 mt-4 w-max sm:mt-0" onClick={handleAdd}>
+                <button className="btn bg-gray-700 mt-4 w-max sm:mt-0" onClick={handleAdd}>
                     {!isAdd ? 'Add Product' : 'Back'}
                 </button>
             </div>
@@ -51,14 +51,15 @@ const Products = () => {
             )}
             {isModal && <Modal handleClose={() => setIsModal(null)}>
                 <div className="p-4 space-y-3">
-                    <h2 className="text-center text-xl mb-3">Product Detail</h2>
+                    <h2 className="text-center text-xl mb-3 font-medium">Product Detail</h2>
                     <p>Product Name: {isModal?.productName}</p>
                     <p>Product Price: <FormatPrice
                         summary
                         value={isModal?.productPrice}
-                        classes="text-lg font-medium text-gray-800"/> </p>
+                        classes="text-lg font-medium text-gray-900"/> </p>
                     
                     <p>Product Quantity: {isModal?.productQty}</p>
+                    <p>Product Category: {isModal?.productCty}</p>
                     <p>Product Description: {isModal?.productDesc}</p>
                 </div>    
             </Modal>}

@@ -29,7 +29,7 @@ const AddMember = ({oldData, handleBack}) => {
             memberEmail: Yup.string().required('Member email is required!').email('Email not valid'),
             memberAddress: Yup.string().required('Member address is required!'),
             memberNoTelp: Yup.number().required('Member no telp is required!')
-                        .test('minSize', 'Minimum long number is 8 number or more', 
+                        .test('minSize', 'Minimum long number is 9 number or more', 
                         value => value?.toString().length >= 9)
         })
     })
@@ -69,14 +69,14 @@ const AddMember = ({oldData, handleBack}) => {
                     title="Member Address"
                     formik={formik}/>
                 <InputControl
-                    type="text"
+                    type="number"
                     id="memberNoTelp"
                     title="Member No Telp"
                     formik={formik}/>
                             
                 <div className="mt-10 flex items-center space-x-3">
                     <button className={`btn ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500'} flex items-center`} type="submit">
-                        {isLoading && <div className="animate-spin ease duration-300 w-3 h-3 mr-2 border-2 border-white"/>}
+                        {isLoading && <div className="btn-loading"/>}
                         {isLoading ? 'Loading, please wait' : 'Submit'}
                     </button>
                     <button className={`btn bg-gray-500 ${isLoading && 'cursor-not-allowed'}`} onClick={handleBack}>Cancel</button>

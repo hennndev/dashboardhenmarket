@@ -1,14 +1,14 @@
 import React from 'react'
 import moment from 'moment'
-import { useSelector } from 'react-redux'
 import { Line } from 'react-chartjs-2'
+import { useSelector } from 'react-redux'
 
 const Analytics = () => {
     
     const transactions = useSelector(state => state.transactions)
 
-    const months = []
-    const avgIncomeInMonth = []
+    const months = [] //untuk labels line chart (semua bulan dari nov 21 higga 12 bulan ke depan)
+    const avgIncomeInMonth = [] //untuk data line chart (rata rata income per bulan)
     const monthsSort = moment.monthsShort()
     const monthsStartToEnd = Array(Math.floor(moment("11-31-2022").diff(moment('11-15-2021'), 'months', true))).fill()
     let monthStart = moment('11-15-2021').format('M')
@@ -32,7 +32,10 @@ const Analytics = () => {
             monthsSort[monthStart - 1]
         )
         avgIncomeInMonth.push(
-            allMonthInTr[monthStart] ? formatTransactions.filter(val => val.month === allMonthInTr[monthStart]).reduce((currVal, val) => currVal += val.totalPrice, 0) : 0
+            allMonthInTr[monthStart] ? 
+                formatTransactions.filter(val => val.month === allMonthInTr[monthStart])
+                                .reduce((currVal, val) => currVal += val.totalPrice, 0) 
+                : 0
         )
         monthStart++
     })
@@ -63,7 +66,7 @@ const Analytics = () => {
     return (
         <div className="page-container grid place-items-center">
             <div className="w-11/12 bg-white p-10 rounded-md">
-                <h1 className="text-2xl font-medium mb-5 text-center">Total Income 2021 - 2022</h1>
+                <h1 className="text-xl lg:text-2xl font-medium mb-5 text-center">Total Income 2021 - 2022</h1>
                 <Line data={data} options={options}/>
             </div>
         </div>

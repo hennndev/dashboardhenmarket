@@ -8,13 +8,6 @@ const Transactions = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const [isModal, setIsModal] = useState(null)
 
-    const handleOpenModal = (data) => {
-        setIsModal(data)
-    }
-    const handleCloseModal = () => {
-        setIsModal(null)
-    }
-
     return (
         <div className="page-container">
             <div className="flex mb-4">
@@ -25,30 +18,28 @@ const Transactions = () => {
                     title="Transactions"/>
             </div>
 
-            <div className="overflow-x-auto w-full">
-                <TransactionsTable  
-                    searchTerm={searchTerm}
-                    handleOpenModal={handleOpenModal}/>
+            <div className="overflow-x-auto">
+                <TransactionsTable searchTerm={searchTerm} handleOpenModal={(data) => setIsModal(data)}/>
             </div>
 
-            {isModal && <Modal handleClose={handleCloseModal}>
+            {isModal && <Modal handleClose={() => setIsModal(null)}>
                 <div className="p-4">
-                    <h2 className="text-center text-xl mb-3">Transaction Detail</h2>
+                    <h2 className="text-center text-xl mb-4 font-medium text-gray-800">Transaction Detail</h2>
                     <div>
                         {isModal.product.map(item => (
                             <div className="flex items-center mb-2" key={item.id}>
-                                <img src={item.productImage} alt="" className="h-20 mr-2" />
+                                <img src={item.productImage} alt={item.productName} className="h-16 mr-2" />
                                 <p>{item.count}X {item.productName}</p>
                             </div>
                         ))}
                     </div>
                     <div className="flex items-center space-x-3">
-                            <p>Total Price: </p>
-                            <FormatPrice value={isModal.totalPrice} classes="font-medium text-green-500" summary/>
+                        <p>Total Price: </p>
+                        <FormatPrice value={isModal.totalPrice} classes="font-medium text-green-500 text-xl" summary/>
                     </div>
                     <div className="flex items-center space-x-3">
-                            <p>Member: </p>
-                            <p>{isModal.member? 'Member' : 'General'}</p>
+                        <p>Member: </p>
+                        <p>{isModal.member? 'Member' : 'General'}</p>
                     </div>
                 </div>    
             </Modal>}

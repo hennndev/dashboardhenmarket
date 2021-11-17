@@ -28,7 +28,6 @@ const Login = (props) => {
                     props.history.push('/')
                 }
             } catch(error) {
-                console.log(error)
                 setIsLoading(false)
                 if(error.code === 'auth/user-not-found') {
                     setIsError('Email not valid as admin')
@@ -49,14 +48,12 @@ const Login = (props) => {
         <div className="flex items-center justify-center px-5">
             <form className="mt-24 shadow-lg rounded-md w-modal h-96 bg-white p-5" onSubmit={formik.handleSubmit}>
                 <h1 className="text-center text-xl font-medium mb-5">Login Form</h1>
-                {/* EMAIL */}
+                
                 <InputControl
                     id="email"
                     title="Email"
                     placeholder="input your email"
                     formik={formik}/>
-
-                {/* PASSWORD */}
                 <InputControl
                     id="password"
                     type="password"
@@ -66,7 +63,7 @@ const Login = (props) => {
 
                 <div className="grid place-items-center mt-5">
                     <button className={`btn ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500'} flex items-center`} type="submit">
-                        {isLoading && <div className="animate-spin ease duration-300 w-3 h-3 mr-2 border-2 border-white"/>}
+                        {isLoading && <div className="btn-loading"/>}
                         {isLoading ? 'Loading, please wait' : 'Login'}
                     </button>
                     {isError && <small className="mt-2 text-red-400">{isError}</small>}

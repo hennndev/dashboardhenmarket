@@ -16,7 +16,8 @@ const TransactionsTable = ({handleOpenModal, searchTerm = '', homepage}) => {
 
     let filteringTransactions = transactions.filter(tr => {
         return tr.product.some(pr => pr.productName.toLowerCase().includes(searchTerm.toLowerCase())) ||
-            String(tr.member ? 'Member' : 'General').toLowerCase().includes(searchTerm.toLowerCase())
+            String(tr.member ? 'Member' : 'General').toLowerCase().includes(searchTerm.toLowerCase()) ||
+            tr.totalPrice >= +searchTerm
     })
 
     if(homepage) filteringTransactions =  filteringTransactions.slice(0, 3)

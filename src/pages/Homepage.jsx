@@ -4,16 +4,16 @@ import { MdStorefront } from 'react-icons/md'
 import Card from '../components/Homepage/Card'
 import { BsCurrencyDollar } from 'react-icons/bs'
 import { useSelector, useDispatch } from 'react-redux'
-import TransactionsTable from '../components/Transactions/TransactionsTable'
 import { getProducts } from '../store/actions/actions'
 import MembersTable from '../components/Members/MembersTable'
+import TransactionsTable from '../components/Transactions/TransactionsTable'
 
 const Homepage = (props) => {
 
     const dispatch = useDispatch()
+    const members = useSelector(state => state.members)
     const products = useSelector(state => state.products)
     const transactions = useSelector(state => state.transactions)
-    const members = useSelector(state => state.members)
 
     useEffect(() => {
         dispatch(getProducts())
@@ -60,14 +60,14 @@ const Homepage = (props) => {
                         <h1 className="text-gray-600">Latest transactions</h1>
                         <button className="btn bg-gray-700 text-sm" onClick={() => props.history.push('/transactions')}>Show more</button>
                     </div>
-                    <div className="overflow-x-scroll w-full">    
+                    <div className="overflow-x-scroll">    
                         <TransactionsTable homepage/>
                     </div>
                 </div>
 
                 <div className="flex-1 mt-8 xl:mt-0">
                     <div className="flex-comp mb-3 text-lg font-medium">
-                        <h1 className="text-gray-600">Latest new member</h1>
+                        <h1 className="text-gray-600">Latest member</h1>
                         <button className="btn bg-gray-700 text-sm" onClick={() => props.history.push('/members')}>Show more</button>
                     </div>
                     <div className="overflow-x-scroll">

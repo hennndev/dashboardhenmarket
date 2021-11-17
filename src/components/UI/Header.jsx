@@ -1,9 +1,9 @@
 import React from 'react'
-import { MdOutlineDarkMode, MdMenu } from 'react-icons/md'
-import { AiOutlineUser } from 'react-icons/ai' 
-import { withRouter } from 'react-router-dom'
-import { handleSide } from '../../store/reducers/appReducer'
 import { useDispatch } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { AiOutlineUser } from 'react-icons/ai' 
+import { MdOutlineDarkMode, MdMenu } from 'react-icons/md'
+import { handleSide } from '../../store/reducers/appReducer'
 
 const Header = ({location}) => {
     const dispatch = useDispatch()
@@ -26,8 +26,7 @@ const Header = ({location}) => {
                     onClick={() => dispatch(handleSide())}>
                     <MdMenu/>
                 </div>
-            </div>
-            
+            </div>  
         </div>
     )
 }

@@ -5,6 +5,7 @@ import { addTransaction } from '../../store/actions/actions'
 
 const Summary = ({totalPrice, handleClear, cartTerm}) => {
     const [isMember, setIsMember] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
     
     const handleTransaction = () => {
         const dataTransaction = {
@@ -12,7 +13,7 @@ const Summary = ({totalPrice, handleClear, cartTerm}) => {
             totalPrice: isMember ? totalPrice * 0.9 : totalPrice,
             product: cartTerm
         }
-        addTransaction(dataTransaction)
+        addTransaction(dataTransaction, handleClear, setIsLoading)
     }
 
     return (
@@ -33,13 +34,12 @@ const Summary = ({totalPrice, handleClear, cartTerm}) => {
             </h1>
             
             <h1 className="text-md mb-1">Discout Member = {isMember ? '10' : '0'}%</h1>
-            <h1 className="text-md mb-1">Discout Monthly = 0%</h1>
             <div className="mt-3">
-                <button className="btn bg-red-500 mr-3" onClick={handleClear}>Clear</button>
-                <button 
-                    className="btn bg-green-500"
-                    onClick={handleTransaction}>
-                    {isMember ? 'Checkout as member' : 'Checkout'}
+                <button className={`btn ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-red-500'} mr-3`} onClick={handleClear}>
+                    {isLoading ? 'Loading...' : 'Clear'}
+                </button>
+                <button className={`btn ${isLoading ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500'}`} onClick={handleTransaction}>
+                    {isMember ? `${isLoading ? 'Loading...' : 'Checkout as member'}` : `${isLoading ? 'Loading' : 'Checkout'}`}
                 </button>
             </div>
             <div 

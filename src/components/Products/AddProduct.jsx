@@ -15,7 +15,8 @@ const AddProduct = ({oldData, handleBack}) => {
             productImage: null,
             productPrice: '',
             productQty: '',
-            productDesc: ''
+            productCty: '',
+            productDesc: '',
         },
         onSubmit: (values) => {
             oldData ? editProduct(oldData, values, setIsLoading, handleBack) : addProduct(values, setIsLoading, handleBack)
@@ -24,8 +25,9 @@ const AddProduct = ({oldData, handleBack}) => {
             productName: Yup.string().required('Product name is required!'),
             productPrice: Yup.number().required('Product price is required!').min(1, 'Minimum price is more than 0'),
             productQty: Yup.number().required('Product quantity is required!'),
+            productCty: Yup.string().required('Product category is required!'),
             productDesc: Yup.string().required('Product description is required!'),
-            productImage: Yup.mixed().required('Product image is required')
+            productImage: Yup.mixed().required('Product image is required!')
                                     .test('fileSize', 'Maximum size image is < 1MB', 
                                     value => typeof value !== 'string' ? value?.size <= 1000000 : value.length > 1)
         })
@@ -39,6 +41,7 @@ const AddProduct = ({oldData, handleBack}) => {
                 productImage: oldData.productImage,
                 productPrice: oldData.productPrice,
                 productQty: oldData.productQty,
+                productCty: oldData.productCty,
                 productDesc: oldData.productDesc
             })
         }
@@ -80,6 +83,13 @@ const AddProduct = ({oldData, handleBack}) => {
                     type="number"
                     formik={formik}/>
 
+                {/* PRODUCT CATEGORY */}
+                <InputControl 
+                    id="productCty"
+                    title="Product Category"
+                    type="text"
+                    formik={formik}/>
+
                 {/* PRODUCT DESC */}
                 <InputControl 
                     id="productDesc"
@@ -91,7 +101,7 @@ const AddProduct = ({oldData, handleBack}) => {
                 <InputControl id="productImage" title="Product Image" formik={formik} image> 
                     <div {...getRootProps()} 
                         className={`border-2 border-dashed px-5 py-10 text-center ${isDragActive ? 'border-blue-300' : 'border-gray-300'}`}>
-                        <input {...getInputProps()} onBlur={formik.handleBlur}/>
+                        <input {...getInputProps()}/>
                         {
                             isDragActive ?
                             <p className="">Drop the files here ...</p> :
@@ -109,7 +119,9 @@ const AddProduct = ({oldData, handleBack}) => {
                         {isLoading && <div className="btn-loading"/>}
                         {isLoading ? 'Loading, please wait' : 'Submit'}
                     </button>
-                    <button className={`btn bg-gray-500 ${isLoading && 'cursor-not-allowed'}`} onClick={handleBack}>Cancel</button>
+                    <button className={`btn bg-gray-500 ${isLoading && 'cursor-not-allowed'}`} onClick={handleBack}>
+                        Cancel
+                    </button>
                 </div>
             </form>
         </div>

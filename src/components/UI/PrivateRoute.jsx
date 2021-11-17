@@ -1,6 +1,6 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { Route, Redirect } from 'react-router-dom'
 
 const PrivateRoute = ({component: Component, auth, ...rest}) => {
     const admin = useSelector(state => state.admin)

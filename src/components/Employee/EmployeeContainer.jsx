@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import Card from './Card'
+import EmployeesBlank from './EmployeesBlank'
 import { useSelector, useDispatch } from 'react-redux'
 import { deleteEmployee, getEmployees } from '../../store/actions/actions'
 
@@ -19,6 +20,10 @@ const EmployeeContainer = ({handleEdit, searchTerm}) => {
             empl.employeeStatus.toLowerCase().includes(searchTerm.toLowerCase()) ||
             String(empl.employeeNoTelp).toLowerCase().includes(searchTerm.toLowerCase())
     })
+
+    if(employees.length < 1) {
+        return <EmployeesBlank/>
+    }
 
     return (
         <div className="cards">

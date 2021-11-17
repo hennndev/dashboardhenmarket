@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
+import Modal from '../components/UI/Modal'
 import InputSearch from '../components/UI/InputSearch'
 import AddMember from '../components/Members/AddMember'
-import { useSelector, useDispatch } from 'react-redux'
-import Modal from '../components/UI/Modal'
 import MembersTable from '../components/Members/MembersTable'
 
 const Members = () => {
@@ -24,26 +23,21 @@ const Members = () => {
         <div className="page-container">
             <div className="flex justify-between flex-col lg:flex-row mb-7">
                 {!isAdd && <InputSearch classes="flex-grow lg:mr-3" title="Members"/>}
-                <div className="flex mt-5 lg:mt-0">
-                    <button className="btn bg-blue-800 mr-3">Info Members</button>
-                    <button className="btn bg-gray-800" onClick={() => setIsAdd(!isAdd)}>
-                        {isAdd ? 'Back' : 'Add Members'}
-                    </button>
-                </div>
+                <button className="btn bg-gray-700 mt-4 w-max lg:mt-0" onClick={() => setIsAdd(!isAdd)}>
+                    {isAdd ? 'Back' : 'Add Members'}
+                </button>
             </div>
 
             {!isAdd && (
-                <div className="overflow-x-scroll w-full">
+                <div className="overflow-x-scroll">
                     <MembersTable handleEdit={handleEdit} handleOpenModal={(data) => setIsModal(data)}/>
                 </div>
             )}
-            {isAdd && <AddMember
-                handleBack={handleBack}
-                oldData={isEdit}/>}
-
+            {isAdd && <AddMember handleBack={handleBack} oldData={isEdit}/>}
+            
             {isModal && <Modal handleClose={() => setIsModal(null)}>
                 <div className="p-4 space-y-3">
-                    <h2 className="text-center text-xl mb-3">Member Detail</h2>
+                    <h2 className="text-center text-xl mb-3 font-medium">Member Detail</h2>
                     <p>Member Name: {isModal?.memberName}</p>
                     <p>Member Address: {isModal?.memberAddress}</p>
                     <p>Member Email: {isModal?.memberEmail}</p>

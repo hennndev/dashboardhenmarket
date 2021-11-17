@@ -27,14 +27,12 @@ const Employees = () => {
                 {!isAdd && <InputSearch 
                     title="Employees"
                     classes="flex-grow sm:mr-3" searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>}
-                <button className="btn bg-gray-800 w-max mt-3 sm:mt-0" onClick={handleAdd}>
+                <button className="btn bg-gray-700 w-max mt-4 sm:mt-0" onClick={handleAdd}>
                     {isAdd ? 'Back' : 'Add Employee'}
                 </button>
             </div>
             {!isAdd && <EmployeeContainer handleEdit={handleEdit} searchTerm={searchTerm}/>}
-            {isAdd && <AddEmployee 
-                oldData={isEdit}
-                handleBack={handleBack}/>}
+            {isAdd && <AddEmployee oldData={isEdit} handleBack={handleBack}/>}
         </div>
     )
 }

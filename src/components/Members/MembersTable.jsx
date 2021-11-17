@@ -18,17 +18,17 @@ const MembersTable = ({handleEdit, handleOpenModal, homepage = null}) => {
     return (
         <table className="border-collapse bg-white w-full">
             <thead>
-                    <tr className="border-b border-gray-300">
-                        <td className="font-medium text-center p-3">No</td>
-                        <td className="font-medium text-center p-3">Name</td>
-                        <td className="font-medium text-center p-3">Email</td>
-                        {!homepage && (
-                            <>
-                                <td className="font-medium text-center p-3">Detail</td>
-                                <td className="font-medium text-center p-3">Actions</td>
-                            </>
-                        )}
-                    </tr>
+                <tr className="border-b border-gray-300">
+                    <td className="font-medium text-center p-3">No</td>
+                    <td className="font-medium text-center p-3">Name</td>
+                    <td className="font-medium text-center p-3">Email</td>
+                    {!homepage && (
+                        <>
+                            <td className="font-medium text-center p-3">Detail</td>
+                            <td className="font-medium text-center p-3">Actions</td>
+                        </>
+                    )}
+                </tr>
             </thead>
             <tbody>
                 {members.length < 1 && (
@@ -52,7 +52,7 @@ const MembersTable = ({handleEdit, handleOpenModal, homepage = null}) => {
                         {!homepage && (
                             <>
                                 <td className="text-center px-10">
-                                    <button className="btn text-sm bg-gray-800" onClick={() => handleOpenModal(member)}>Detail</button>
+                                    <button className="btn text-sm bg-gray-700" onClick={() => handleOpenModal(member)}>Detail</button>
                                 </td>
                                 <td className="text-sm px-5">
                                     <div className="flex items-center justify-center">

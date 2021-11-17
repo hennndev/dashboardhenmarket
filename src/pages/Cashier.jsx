@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import Modal from '../components/UI/Modal'
 import Summary from '../components/Cashier/Summary'
+import FormatPrice from '../components/UI/FormatPrice'
 import InputSearch from '../components/UI/InputSearch'
 import CashierTable from '../components/Cashier/CashierTable'
 import CashierBlank from '../components/Cashier/CashierBlank'
@@ -12,7 +13,7 @@ const Cashier = () => {
     const [cartTerm, setCartTerm] = useState(JSON.parse(localStorage.getItem('cartTerm')) || [])
     const inputRef = useRef(null)
 
-    const handleCloseModal = () => setIsModal(null)
+
     const handleOpenModal = (data, e) => {
         e.stopPropagation()
         setIsModal(data)
@@ -55,6 +56,10 @@ const Cashier = () => {
         return currVal + (val.count * val.productPrice)
     }, 0)
 
+    const handleClear = () => {
+        setCartTerm([])
+        localStorage.setItem('cartTerm', JSON.stringify([]))
+    }
 
 
     return (
@@ -65,13 +70,12 @@ const Cashier = () => {
                 searchTerm={searchTerm} 
                 setSearchTerm={setSearchTerm}/>
 
-            <div className="overflow-x-scroll w-full mt-5">    
+            <div className="overflow-x-scroll mt-5">    
                 <ProductsTable 
                     cashier
                     handleOpenModal={handleOpenModal}
                     handleAddCart={handleAddCart}
-                    searchTerm={searchTerm}
-                    classes/>
+                    searchTerm={searchTerm}/>
             </div>
             
             {cartTerm.length > 0 && (
@@ -90,16 +94,19 @@ const Cashier = () => {
                     <Summary 
                         totalPrice={totalPrice} 
                         cartTerm={cartTerm}
-                        handleClear={() => setCartTerm([])}/>}
+                        handleClear={handleClear}/>}
             </div>
             
             
-            {isModal && <Modal handleClose={handleCloseModal}>
-                <div className="p-4">
-                    <h2 className="text-center text-xl mb-3">Product Detail</h2>
+            {isModal && <Modal handleClose={() => setIsModal(null)}>
+                <div className="p-4 space-y-3">
+                    <h2 className="text-center text-xl mb-5 font-medium">Product Detail</h2>
                     <p>Product Name: {isModal?.productName}</p>
-                    <p>Product Price: ${isModal?.productPrice}</p>
+                    <p>Product Price: {' '}
+                        <FormatPrice value={isModal?.productPrice} summary classes="text-lg text-gray-800 font-medium"/> 
+                    </p>
                     <p>Product Quantity: {isModal?.productQty}</p>
+                    <p>Product Category: {isModal?.productCty}</p>
                     <p>Product Description: {isModal?.productDesc}</p>
                 </div>    
             </Modal>}

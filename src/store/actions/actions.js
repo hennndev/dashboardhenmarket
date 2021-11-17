@@ -3,22 +3,7 @@ import { handleProducts, handleEmployees, handleTransactions, handleMembers } fr
 import { auth, db, storage, timestamp } from '../../firebase/firebaseConfig'
 
 
-
-const getData = (coll, handleData) => {
-    return dispatch => {
-        db.collection(coll).orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-            const updateData = []
-            
-            snapshot.forEach(snap => {
-                updateData.push({
-                    id: snap.id,
-                    ...snap.data()
-                })
-            })
-            dispatch(handleData(updateData))
-        })
-    }
-}
+// utils
 const deleteData = (coll, id, imageURL = null) => {
     Swal.fire({
         title: `Delete ${coll.slice(0, coll.length - 1).toLowerCase()}?`,
@@ -30,7 +15,11 @@ const deleteData = (coll, id, imageURL = null) => {
     }).then((result) => {
         if (result.isConfirmed) {
             db.collection(coll.toLowerCase()).doc(id).delete().then(() => {                  
-                if(imageURL) storage.refFromURL(imageURL).delete()
+                if(imageURL) {
+                    storage.refFromURL(imageURL).delete()
+                } else {
+                    return
+                }
             })
             Swal.fire(
                 `${coll.slice(0, coll.length - 1)} has been deleted`,
@@ -80,12 +69,28 @@ export const  addProduct = (data, setIsLoading, handleBack) => {
                         )
                         handleBack()
                     })
+                }).catch(() => {
+                    setIsLoading(false)
                 })
         }
     })
 }
 
-export const getProducts = () => getData('products', handleProducts)
+export const getProducts = () => {
+    return dispatch => {
+        db.collection('products').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            const updateProducts = []
+            
+            snapshot.forEach(snap => {
+                updateProducts.push({
+                    id: snap.id,
+                    ...snap.data()
+                })
+            })
+            dispatch(handleProducts(updateProducts))
+        })
+    }
+}
 export const deleteProduct = (data) => deleteData('Products', data.id, data.productImage)
 export const editProduct = (oldData, newData, setIsLoading, handleBack) => {
     Swal.fire({
@@ -93,7 +98,7 @@ export const editProduct = (oldData, newData, setIsLoading, handleBack) => {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        cancelButtonColor: 'gray',
         confirmButtonText: 'Update now!'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -110,7 +115,7 @@ export const editProduct = (oldData, newData, setIsLoading, handleBack) => {
                         'success'
                     )
                     handleBack()
-                })
+                }).catch(() => setIsLoading(false))
             } else {
                 storage.ref(`/imagesProduct/${newData.productImage?.name}`)
                 .put(newData.productImage)
@@ -129,7 +134,7 @@ export const editProduct = (oldData, newData, setIsLoading, handleBack) => {
                                 'success'
                             )
                             handleBack()
-                        })    
+                        }).catch(() => setIsLoading(false))    
                     })
                 })
             }
@@ -147,7 +152,7 @@ export const addEmployee = (data, setIsLoading, handleBack) => {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        cancelButtonColor: 'gray',
         confirmButtonText: 'Adding now!'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -168,16 +173,28 @@ export const addEmployee = (data, setIsLoading, handleBack) => {
                                 'success'
                             )
                             handleBack()
-                        })   
+                        }).catch(() => setIsLoading(false))
                     })
-                }).catch(() => {
-                    setIsLoading(false)
-                })
+                }).catch(() => setIsLoading(false))
         }
     })
 }
-export const getEmployees = () => getData('employees', handleEmployees)
-export const deleteEmployee = (data) => deleteData('Employees', data.id, data.employeeImage )
+export const getEmployees = () => {
+    return dispatch => {
+        db.collection('employees').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            const updateEmployees = []
+            
+            snapshot.forEach(snap => {
+                updateEmployees.push({
+                    id: snap.id,
+                    ...snap.data()
+                })
+            })
+            dispatch(handleEmployees(updateEmployees))
+        })
+    }
+}
+export const deleteEmployee = (data) => deleteData('Employees', data.id, data.employeeImage)
 export const editEmployee = (oldData, newData, setIsLoading, handleBack) => {
     Swal.fire({
         title: 'Update employee?',
@@ -192,7 +209,7 @@ export const editEmployee = (oldData, newData, setIsLoading, handleBack) => {
             if(typeof newData.employeeImage === 'string') {
                 db.collection('employees').doc(oldData.id).update({
                     ...newData,
-                    productImageName: oldData.employeeImageName,
+                    employeeImageName: oldData.employeeImageName,
                     timestamp: oldData.timestamp
                 }).then(() => {
                     setIsLoading(false)
@@ -201,7 +218,7 @@ export const editEmployee = (oldData, newData, setIsLoading, handleBack) => {
                         'success'
                     )
                     handleBack()
-                })
+                }).catch(() => setIsLoading(false))
             } else {
                 storage.ref(`/imagesEmployees/${newData.employeeImage?.name}`)
                 .put(newData.employeeImage)
@@ -220,9 +237,9 @@ export const editEmployee = (oldData, newData, setIsLoading, handleBack) => {
                                 'success'
                             )
                             handleBack()
-                        })    
+                        }).catch(() => setIsLoading(false))
                     })
-                })
+                }).catch(() => setIsLoading(false))
             }
         }
     })
@@ -233,7 +250,7 @@ export const editEmployee = (oldData, newData, setIsLoading, handleBack) => {
 
 
 // TRANSACTIONS
-export const addTransaction = (data) => {
+export const addTransaction = (data, handleClear, setIsLoading) => {
     Swal.fire({
         title: 'Create history transaction?',
         icon: 'warning',
@@ -243,19 +260,35 @@ export const addTransaction = (data) => {
         confirmButtonText: 'Create now!'
     }).then((result) => {
         if (result.isConfirmed) {
+            setIsLoading(true)
             db.collection('transactions').add({
                 ...data,
                 timestamp: timestamp()
             }).then(() => {
+                setIsLoading(false)
                 Swal.fire(
                     'New history transaction has been created',
                     'success'
                 )
-            })
+                handleClear()
+            }).catch(() => setIsLoading(false))
         }
     })
 }
-export const getTransactions = () => getData('transactions', handleTransactions)
+export const getTransactions = () => {
+    return dispatch => {
+        db.collection('transactions').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            const updateTransactions = []    
+            snapshot.forEach(snap => {
+                updateTransactions.push({
+                    id: snap.id,
+                    ...snap.data()
+                })
+            })
+            dispatch(handleTransactions(updateTransactions))
+        })
+    }
+}
 export const deleteTransaction = (data) => deleteData('Transactions', data.id)
 
 
@@ -291,7 +324,21 @@ export const addMember = (data, setIsLoading, handleBack) => {
         }
     })
 }
-export const getMembers = () => getData('members', handleMembers)
+export const getMembers = () => {
+    return dispatch => {
+        db.collection('members').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+            const updateMembers = []
+            
+            snapshot.forEach(snap => {
+                updateMembers.push({
+                    id: snap.id,
+                    ...snap.data()
+                })
+            })
+            dispatch(handleMembers(updateMembers))
+        })
+    }
+}
 export const editMember = (oldData, newData, setIsLoading, handleBack) => {
     Swal.fire({
         title: 'Update member?',
@@ -322,6 +369,10 @@ export const editMember = (oldData, newData, setIsLoading, handleBack) => {
 export const deleteMember = (data) => deleteData('Members', data.id)
 
 
+
+
+
+// AUTH
 export const login = (email, password) => {
     return auth.signInWithEmailAndPassword(email, password)
 }
